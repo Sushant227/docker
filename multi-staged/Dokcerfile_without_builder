@@ -1,0 +1,21 @@
+FROM maven:3.9.11-eclipse-temurin-21
+
+RUN groupadd -r spring && \
+    useradd -r -g spring spring
+
+WORKDIR /test/app
+
+COPY pom.xml .
+RUN mvn dependency:go-offline
+
+COPY src ./src
+RUN mvn clean package -DskipTests
+
+RUN cp target/*.jar app.jar && \
+    chown spring:spring app.jar
+
+USER spring
+
+EXPOSE 9876
+
+ENTRYPOINT ["java", "-jar","app.jar"]
