@@ -1,0 +1,10 @@
+services:
+  app:
+    build: .
+    image: volume-demo:local
+    volumes:
+      - app-data:/data
+
+volumes:
+  app-data:
+    driver: local
